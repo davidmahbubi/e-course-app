@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "592760724535",
+    "project_id": "e-course-app",
+    "storage_bucket": "e-course-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592760724535:android:386c0a857779ef14f473b2",
+        "android_client_info": {
+          "package_name": "id.my.davidmhb.e_course_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592760724535-pbll1lmbrhhh8rbriukj7ts8lp48i0hp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8U9MVeeQTbr3ZfBTJ-PR3llQejxg40fs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592760724535-pbll1lmbrhhh8rbriukj7ts8lp48i0hp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

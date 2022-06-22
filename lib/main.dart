@@ -1,9 +1,13 @@
-import 'package:e_course_app/pages/home.dart';
-import 'package:e_course_app/pages/video_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:e_course_app/pages/video_list.dart';
 
-void main(List<String> args) => runApp(const ECourseApp());
+void main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
+  runApp(const ECourseApp());
+}
 
 class ECourseApp extends StatelessWidget {
   const ECourseApp({Key? key}) : super(key: key);

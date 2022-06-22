@@ -1,10 +1,15 @@
-import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:e_course_app/services/storage_service.dart';
+import 'package:e_course_app/utils/helper.dart';
+import 'package:e_course_app/services/database_service.dart';
 
 class VideoForm extends StatefulWidget {
-  String pageTitle;
+  final String pageTitle;
+  final Reference thumbsRef = StorageService.getRef('/thumbnails');
 
   VideoForm({Key? key, required this.pageTitle}) : super(key: key);
 
@@ -13,6 +18,13 @@ class VideoForm extends StatefulWidget {
 }
 
 class _VideoFormState extends State<VideoForm> {
+
+  TextEditingController youtubeIdController = TextEditingController();
+  TextEditingController videoTitleController = TextEditingController();
+  TextEditingController subjectTitleController = TextEditingController();
+
+  String thumbName = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,35 +53,32 @@ class _VideoFormState extends State<VideoForm> {
                 Center(
                   child: InkWell(
                     onTap: () async {
-                      FilePickerResult? result =
-                          await FilePicker.platform.pickFiles();
-                      if (result != null) {
-                        print(result.files.single.path);
-                      }
+                      FilePickerResult? result = await FilePicker.platform.pickFiles();
+                      thumbName = await uploadFiles(result) ?? 'default-thumbnail';
                     },
-                    child: Image.asset(
-                      'assets/images/example_banner_video.jpg',
-                      height: 250,
-                    ),
+                    child: Image.asset('assets/images/example_banner_video.jpg', height: 250)
                   ),
                 ),
                 const SizedBox(height: 40),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: youtubeIdController,
+                  decoration: const InputDecoration(
                     label: Text('ID YouTube Video'),
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 15),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: videoTitleController,
+                  decoration: const InputDecoration(
                     label: Text('Judul Video'),
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 15),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: subjectTitleController,
+                  decoration: const InputDecoration(
                     label: Text('Mata Pelajaran'),
                     border: OutlineInputBorder(),
                   ),
@@ -78,7 +87,14 @@ class _VideoFormState extends State<VideoForm> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      bool storeStatus = await storeVideo();
+                      print('Data stored');
+                      print(storeStatus);
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   SnackBar(content: Text('Berhasil menambahkan data video baru')),
+                      // );
+                    },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 18),
                       child: Text('Simpan'),
@@ -91,5 +107,37 @@ class _VideoFormState extends State<VideoForm> {
         ),
       ),
     );
+  }
+
+  Future<String?> uploadFiles(FilePickerResult? fpr) async {
+    try {
+      if (fpr != null) {
+        File thumbsFile = File(fpr.files.single.path!);
+        String fileName = randomizeFileName(thumbsFile);
+        widget.thumbsRef.child(fileName).putFile(thumbsFile);
+        return fileName;
+      } else {
+        return null;
+      }
+    } on FirebaseException catch (e) {
+      print('Error uploading file');
+      return null;
+    }
+  }
+
+  Future<bool> storeVideo() async {
+    try {
+      return DatabaseService.videoCollection().add({
+        'youtubeId': youtubeIdController.text,
+        'title': videoTitleController.text,
+        'subject': subjectTitleController.text,
+        'tumbnailName': thumbName,
+      }).then((value) {
+        print('Suksesss');
+        return true;
+      });
+    } on Exception catch(e) {
+      return false;
+    }
   }
 }
