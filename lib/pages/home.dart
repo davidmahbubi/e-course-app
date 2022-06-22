@@ -1,6 +1,7 @@
 import 'package:e_course_app/pages/watch_video.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/services.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -13,18 +14,24 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        shape: null,
+        title: const Text(
+          'E-Course App',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Text(
-                'E-Course App',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-            ),
             const SizedBox(height: 10),
             CarouselSlider(
               options: CarouselOptions(height: 200, enlargeCenterPage: true),
@@ -48,13 +55,13 @@ class _HomeState extends State<Home> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 30),
             Expanded(
               child: GridView.count(
                 childAspectRatio: 0.62,
                 crossAxisCount: 2,
                 shrinkWrap: true,
-                // physics: const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 children: List.generate(10, (index) {
                   return InkWell(
                     onTap: () {
@@ -62,7 +69,13 @@ class _HomeState extends State<Home> {
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) => WatchVideo()),
-                      );
+                      ).then((_) {
+                        SystemChrome.setPreferredOrientations(
+                            [DeviceOrientation.portraitUp]);
+                        SystemChrome.setEnabledSystemUIMode(
+                          SystemUiMode.edgeToEdge,
+                        );
+                      });
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,

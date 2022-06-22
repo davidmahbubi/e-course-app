@@ -1,5 +1,7 @@
 import 'package:e_course_app/pages/home.dart';
+import 'package:e_course_app/pages/video_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main(List<String> args) => runApp(const ECourseApp());
 
@@ -8,9 +10,19 @@ class ECourseApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.white, // status bar color
+    ));
+
     return MaterialApp(
-      theme: ThemeData(fontFamily: 'Poppins'),
-      home: const Home(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+        ),
+      ),
+      home: const VideoList(),
     );
   }
 }

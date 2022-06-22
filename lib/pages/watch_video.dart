@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class WatchVideo extends StatelessWidget {
   final YoutubePlayerController ytController = YoutubePlayerController(
-    initialVideoId: '5TOlF1cOflo',
+    initialVideoId: 'azjRAEB1zXY',
     flags: const YoutubePlayerFlags(mute: false),
   );
 
@@ -11,6 +12,9 @@ class WatchVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+    ytController.toggleFullScreenMode();
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -22,17 +26,18 @@ class WatchVideo extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const <Widget>[
-                    SizedBox(height: 10),
-                    Text(
-                      'Aljabar Linier',
+                  children: <Widget>[
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Cara Kerja Mobile Phone',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
                     ),
-                    SizedBox(height: 3),
-                    Text('Matematika Diskrit')
+                    const SizedBox(height: 3),
+                    const Text('Science Terapan'),
+                    FullScreenButton(controller: ytController)
                   ],
                 ),
               )
