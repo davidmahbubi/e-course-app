@@ -5,7 +5,7 @@ import 'package:e_course_app/pages/video_list.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(const ECourseApp());
 }
 

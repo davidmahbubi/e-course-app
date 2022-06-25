@@ -13,6 +13,6 @@ String randomizeFileName(File file) {
 
 String getFileExtension(File file) {
   String filePath = file.path;
-  filePath.split('.');
-  return filePath[filePath.length - 1];
+  List<String> filePathArr = filePath.split('.');
+  return filePathArr[filePathArr.length - 1];
 }

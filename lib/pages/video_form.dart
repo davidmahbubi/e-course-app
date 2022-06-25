@@ -89,11 +89,10 @@ class _VideoFormState extends State<VideoForm> {
                   child: ElevatedButton(
                     onPressed: () async {
                       bool storeStatus = await storeVideo();
-                      print('Data stored');
-                      print(storeStatus);
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   SnackBar(content: Text('Berhasil menambahkan data video baru')),
-                      // );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Berhasil menambahkan data video baru')),
+                      );
+                      Navigator.pop(context);
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 18),
@@ -114,6 +113,7 @@ class _VideoFormState extends State<VideoForm> {
       if (fpr != null) {
         File thumbsFile = File(fpr.files.single.path!);
         String fileName = randomizeFileName(thumbsFile);
+        print('FILE NAME = $fileName');
         widget.thumbsRef.child(fileName).putFile(thumbsFile);
         return fileName;
       } else {
@@ -132,6 +132,7 @@ class _VideoFormState extends State<VideoForm> {
         'title': videoTitleController.text,
         'subject': subjectTitleController.text,
         'tumbnailName': thumbName,
+        'thumbnailUrl': await fetchFirebaseImage(thumbName),
       }).then((value) {
         print('Suksesss');
         return true;
@@ -139,5 +140,11 @@ class _VideoFormState extends State<VideoForm> {
     } on Exception catch(e) {
       return false;
     }
+  }
+
+  Future<String> fetchFirebaseImage(String imageName) async {
+    Reference ref = StorageService.getRef('thumbnails').child(imageName);
+    String url = await ref.getDownloadURL();
+    return url;
   }
 }

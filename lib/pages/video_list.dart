@@ -1,3 +1,4 @@
+import 'package:e_course_app/components/video_card.dart';
 import 'package:e_course_app/pages/video_form.dart';
 import 'package:e_course_app/pages/watch_video.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,7 @@ class _VideoListState extends State<VideoList> {
                   childAspectRatio: 0.58,
                   crossAxisCount: 2,
                   shrinkWrap: true,
+                  cacheExtent: 999999999,
                   physics: const BouncingScrollPhysics(),
                   children: List.generate(10, (index) {
                     return InkWell(
@@ -54,48 +56,11 @@ class _VideoListState extends State<VideoList> {
                           ),
                         );
                       },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          ClipRRect(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(15)),
-                            child: Image.asset(
-                              'assets/images/example_banner_video.jpg',
-                              width: 170,
-                            ),
-                          ),
-                          const SizedBox(height: 13),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Flexible(
-                              child: Text(
-                                'Aljabar Linear',
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                style: TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Flexible(
-                              child: Text(
-                                'Matematika Diskrit',
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: const VideoCard(
+                        imagePath: 'https://firebasestorage.googleapis.com/v0/b/e-course-app.appspot.com/o/thumbnails%2FggQYfoBRiW.jpg?alt=media',
+                        title: 'ss',
+                        subject: 'ssss',
+                        ),
                     );
                   }),
                 ),
