@@ -129,6 +129,8 @@ class _VideoFormState extends State<VideoForm> {
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
                         youtubeVideoId: widget.videoData!['videoMeta']['youtubeId'],
+                        subject: widget.videoData!['videoMeta']['subject'],
+                        title: widget.videoData!['videoMeta']['title'],
                       ))).then((_) {
                         SystemChrome.setPreferredOrientations(
                             [DeviceOrientation.portraitUp]);

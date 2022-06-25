@@ -4,43 +4,46 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class WatchVideo extends StatelessWidget {
 
+  final String title;
+  final String subject;
   final String youtubeVideoId;
   late final YoutubePlayerController ytController;
 
-  WatchVideo({Key? key, this.youtubeVideoId = 'azjRAEB1zXY'}) : super(key: key) {
+  WatchVideo({Key? key, required this.title, required this.subject, this.youtubeVideoId = 'azjRAEB1zXY'}) : super(key: key) {
     ytController = YoutubePlayerController(
       initialVideoId: youtubeVideoId,
-      flags: const YoutubePlayerFlags(mute: false),
+      flags: const YoutubePlayerFlags(mute: false, loop: true),
     );
+  }
+
+  void toggleLandscapeFullscreen() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+    ytController.toggleFullScreenMode();
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-    ytController.toggleFullScreenMode();
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              YoutubePlayer(controller: ytController),
+              YoutubePlayer(controller: ytController, onReady: toggleLandscapeFullscreen),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     const SizedBox(height: 10),
-                    const Text(
-                      'Cara Kerja Mobile Phone',
-                      style: TextStyle(
+                    Text(
+                      title, style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
                     ),
                     const SizedBox(height: 3),
-                    const Text('Science Terapan'),
+                    Text(subject),
                     FullScreenButton(controller: ytController)
                   ],
                 ),

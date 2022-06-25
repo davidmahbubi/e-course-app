@@ -1,3 +1,4 @@
+import 'package:e_course_app/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,7 +18,6 @@ class ECourseApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.white, // status bar color
     ));
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

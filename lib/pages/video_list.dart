@@ -1,3 +1,4 @@
+import 'package:e_course_app/components/video_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -65,29 +66,15 @@ class _VideoListState extends State<VideoList> {
                     SizedBox(height: 10),
                     EmptyContent(description: 'Klik tombol + untuk menambahkan video baru')
                   ],
-                ) : GridView.count(
-                  childAspectRatio: 0.58,
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  cacheExtent: 9999,
-                  physics: const BouncingScrollPhysics(),
-                  children: videosList.map((QueryDocumentSnapshot<Object?> data) {
-                    Map<String, dynamic> videoData = data.data() as Map<String, dynamic>;
-                    return InkWell(
-                      onTap:  () {
-                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VideoForm(pageTitle: 'Update Video', videoFormMode: VideoFormMode.update, videoData: {
-                          'id': data.id,
+                ) : VideoGrid(videosList: videosList, onTap: (String videoId, Map<String, dynamic> videoData) {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (BuildContext context) => VideoForm(pageTitle: 'Update Video', videoFormMode: VideoFormMode.update, videoData: {
+                          'id': videoId,
                           'videoMeta': videoData,
-                        })));
-                      },
-                      child: VideoCard(
-                        imagePath: videoData['thumbnailUrl'],
-                        title: videoData['title'],
-                        subject: videoData['subject'],
-                      ),
-                    );
-                  }).toList(),
-                ),
+                        })),
+                      );
+                    },
+                  ),
               )
             ],
           ),
