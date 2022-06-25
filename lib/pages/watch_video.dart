@@ -3,12 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class WatchVideo extends StatelessWidget {
-  final YoutubePlayerController ytController = YoutubePlayerController(
-    initialVideoId: 'azjRAEB1zXY',
-    flags: const YoutubePlayerFlags(mute: false),
-  );
 
-  WatchVideo({Key? key}) : super(key: key);
+  final String youtubeVideoId;
+  late final YoutubePlayerController ytController;
+
+  WatchVideo({Key? key, this.youtubeVideoId = 'azjRAEB1zXY'}) : super(key: key) {
+    ytController = YoutubePlayerController(
+      initialVideoId: youtubeVideoId,
+      flags: const YoutubePlayerFlags(mute: false),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

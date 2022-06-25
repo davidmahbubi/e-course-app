@@ -15,8 +15,8 @@ class VideoCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
-          child: Image.network(imagePath),
+          // borderRadius: const BorderRadius.all(Radius.circular(15)),
+          child: Image.network(imagePath, height: 210, width: 160),
         ),
         const SizedBox(height: 13),
         Padding(

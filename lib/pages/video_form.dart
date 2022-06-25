@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:e_course_app/enums/video_form_mode.dart';
+import 'package:e_course_app/pages/watch_video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
@@ -10,8 +12,10 @@ import 'package:e_course_app/services/database_service.dart';
 class VideoForm extends StatefulWidget {
   final String pageTitle;
   final Reference thumbsRef = StorageService.getRef('/thumbnails');
+  final VideoFormMode videoFormMode;
+  final Map<String, dynamic>? videoData;
 
-  VideoForm({Key? key, required this.pageTitle}) : super(key: key);
+  VideoForm({Key? key, required this.pageTitle, required this.videoFormMode, this.videoData}) : super(key: key);
 
   @override
   State<VideoForm> createState() => _VideoFormState();
@@ -24,9 +28,15 @@ class _VideoFormState extends State<VideoForm> {
   TextEditingController subjectTitleController = TextEditingController();
 
   String thumbName = '';
+  File? localFile;
 
   @override
   Widget build(BuildContext context) {
+
+    if (widget.videoFormMode == VideoFormMode.update) {
+      print(widget.videoData);
+    }
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
@@ -56,10 +66,19 @@ class _VideoFormState extends State<VideoForm> {
                       FilePickerResult? result = await FilePicker.platform.pickFiles();
                       thumbName = await uploadFiles(result) ?? 'default-thumbnail';
                     },
-                    child: Image.asset('assets/images/example_banner_video.jpg', height: 250)
+                    child: Column(
+                      children: localFile == null ? [
+                        const SizedBox(height: 20),
+                        Image.asset('assets/images/picture.png', width: 200),
+                        const SizedBox(height: 30),
+                        const Text('Klik disini untuk menambah thumbnail')
+                      ] : [
+                        Image.file(localFile!)
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
                 TextField(
                   controller: youtubeIdController,
                   decoration: const InputDecoration(
@@ -89,14 +108,38 @@ class _VideoFormState extends State<VideoForm> {
                   child: ElevatedButton(
                     onPressed: () async {
                       bool storeStatus = await storeVideo();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Berhasil menambahkan data video baru')),
-                      );
-                      Navigator.pop(context);
+                      if (storeStatus) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Berhasil menambahkan data video baru')),
+                        );
+                        Navigator.pop(context);
+                      }
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 18),
                       child: Text('Simpan'),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                if (widget.videoFormMode == VideoFormMode.update)
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
+                        youtubeVideoId: widget.videoData!['videoMeta']['youtubeId'],
+                      ))).then((_) {
+                        SystemChrome.setPreferredOrientations(
+                            [DeviceOrientation.portraitUp]);
+                        SystemChrome.setEnabledSystemUIMode(
+                          SystemUiMode.edgeToEdge,
+                        );
+                      });
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 18),
+                      child: Text('Preview Video'),
                     ),
                   ),
                 )
@@ -111,11 +154,17 @@ class _VideoFormState extends State<VideoForm> {
   Future<String?> uploadFiles(FilePickerResult? fpr) async {
     try {
       if (fpr != null) {
-        File thumbsFile = File(fpr.files.single.path!);
-        String fileName = randomizeFileName(thumbsFile);
-        print('FILE NAME = $fileName');
-        widget.thumbsRef.child(fileName).putFile(thumbsFile);
-        return fileName;
+        setState(() {
+          localFile = File(fpr.files.single.path!);
+        });
+        if (localFile != null) {
+          String fileName = randomizeFileName(localFile!);
+          print('FILE NAME = $fileName');
+          widget.thumbsRef.child(fileName).putFile(localFile!);
+          return fileName;
+        } else {
+          return null;
+        }
       } else {
         return null;
       }

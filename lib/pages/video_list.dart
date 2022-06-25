@@ -1,8 +1,11 @@
-import 'package:e_course_app/components/video_card.dart';
-import 'package:e_course_app/pages/video_form.dart';
-import 'package:e_course_app/pages/watch_video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_course_app/enums/video_form_mode.dart';
+import 'package:e_course_app/components/empty_content.dart';
+import 'package:e_course_app/components/video_card.dart';
+import 'package:e_course_app/pages/video_form.dart';
+import 'package:e_course_app/services/database_service.dart';
 
 class VideoList extends StatefulWidget {
   const VideoList({Key? key}) : super(key: key);
@@ -12,6 +15,28 @@ class VideoList extends StatefulWidget {
 }
 
 class _VideoListState extends State<VideoList> {
+
+  List<QueryDocumentSnapshot<Object?>> videosList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    registerVideoDatabaseEvent();
+  }
+
+  void registerVideoDatabaseEvent() {
+    DatabaseService.videoCollection().snapshots().listen(
+      (event) {
+        setState(() {
+          videosList = event.docs.toList();
+        });
+      },
+      onError: (error) {
+        print('An error occured when fetching data');
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,37 +57,36 @@ class _VideoListState extends State<VideoList> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text(
-                'Video yang Tersedia',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
+              const Text('Video yang Tersedia', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               const SizedBox(height: 20),
               Expanded(
-                child: GridView.count(
+                child: videosList.isEmpty ? Column(
+                  children: const <Widget> [
+                    SizedBox(height: 10),
+                    EmptyContent(description: 'Klik tombol + untuk menambahkan video baru')
+                  ],
+                ) : GridView.count(
                   childAspectRatio: 0.58,
                   crossAxisCount: 2,
                   shrinkWrap: true,
-                  cacheExtent: 999999999,
+                  cacheExtent: 9999,
                   physics: const BouncingScrollPhysics(),
-                  children: List.generate(10, (index) {
+                  children: videosList.map((QueryDocumentSnapshot<Object?> data) {
+                    Map<String, dynamic> videoData = data.data() as Map<String, dynamic>;
                     return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => VideoForm(
-                              pageTitle: 'Update Video',
-                            ),
-                          ),
-                        );
+                      onTap:  () {
+                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VideoForm(pageTitle: 'Update Video', videoFormMode: VideoFormMode.update, videoData: {
+                          'id': data.id,
+                          'videoMeta': videoData,
+                        })));
                       },
-                      child: const VideoCard(
-                        imagePath: 'https://firebasestorage.googleapis.com/v0/b/e-course-app.appspot.com/o/thumbnails%2FggQYfoBRiW.jpg?alt=media',
-                        title: 'ss',
-                        subject: 'ssss',
-                        ),
+                      child: VideoCard(
+                        imagePath: videoData['thumbnailUrl'],
+                        title: videoData['title'],
+                        subject: videoData['subject'],
+                      ),
                     );
-                  }),
+                  }).toList(),
                 ),
               )
             ],
@@ -76,6 +100,7 @@ class _VideoListState extends State<VideoList> {
             MaterialPageRoute(
               builder: (BuildContext context) => VideoForm(
                 pageTitle: 'Tambah Video',
+                videoFormMode: VideoFormMode.create,
               ),
             ),
           );

@@ -1,0 +1,1 @@
+enum VideoFormMode { create, update }
