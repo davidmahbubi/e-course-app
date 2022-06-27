@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_course_app/pages/watch_video.dart';
 import 'package:e_course_app/services/database_service.dart';
 import 'package:e_course_app/components/empty_content.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<QueryDocumentSnapshot<Object?>> videosList = [];
+  bool? _isAdmin; 
 
   @override
   void initState() {
@@ -34,6 +36,12 @@ class _HomeState extends State<Home> {
         print('An error occured when fetching data');
       },
     );
+  }
+
+  Future<void> retrieveUserInfo() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? userData = prefs.getStringList('user');
+    if (userData != null) _isAdmin = userData[1] == 'admin';
   }
 
   @override
@@ -71,16 +79,18 @@ class _HomeState extends State<Home> {
               ]): 
               VideoGrid(videosList: videosList,
                 onTap: (String videoId, Map<String, dynamic> videoData) { 
-                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
-                    youtubeVideoId: videoData['youtubeId'],
-                    title: videoData['title'],
-                    subject: videoData['subject'],
-                  ))).then((_) {
-                    SystemChrome.setPreferredOrientations(
-                        [DeviceOrientation.portraitUp]);
-                    SystemChrome.setEnabledSystemUIMode(
-                        SystemUiMode.edgeToEdge);
-                  });
+                  try {
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
+                      youtubeVideoId: videoData['youtubeId'],
+                      title: videoData['title'],
+                      subject: videoData['subject'],
+                    ))).then((_) {
+                      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+                    });
+                  } catch(e) {
+                    print('Navigator error $e');
+                  }
                 }
               ),
             )

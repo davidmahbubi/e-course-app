@@ -1,8 +1,9 @@
-import 'package:e_course_app/pages/home.dart';
+import 'package:e_course_app/pages/wrapper.dart';
+import 'package:e_course_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:e_course_app/pages/video_list.dart';
+import 'package:provider/provider.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,11 @@ class ECourseApp extends StatelessWidget {
           systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
       ),
-      home: const VideoList(),
+      home: StreamProvider.value(
+        value: AuthService.firebaseUserStream,
+        initialData: null,
+        child: const Wrapper(),
+      ),
     );
   }
 }

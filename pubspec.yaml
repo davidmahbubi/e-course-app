@@ -37,7 +37,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg: ^1.1.0
+  provider: ^6.0.3
   random_string_generator: ^2.0.0
+  shared_preferences: ^2.0.15
   youtube_player_flutter: ^8.1.0
 
 dev_dependencies:
@@ -66,7 +68,9 @@ flutter:
     - assets/images/example_banner.jpg
     - assets/images/example_banner_video.jpg
     - assets/images/picture.png
+    - assets/images/book.png
     - assets/images/empty.svg
+    - assets/images/student.svg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

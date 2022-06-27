@@ -34,6 +34,11 @@ class _VideoFormState extends State<VideoForm> {
   Widget build(BuildContext context) {
 
     if (widget.videoFormMode == VideoFormMode.update) {
+      
+      youtubeIdController.text = widget.videoData!['videoMeta']['youtubeId'];
+      videoTitleController.text = widget.videoData!['videoMeta']['title'];
+      subjectTitleController.text = widget.videoData!['videoMeta']['subject'];
+
       print(widget.videoData);
     }
 
@@ -69,7 +74,7 @@ class _VideoFormState extends State<VideoForm> {
                     child: Column(
                       children: localFile == null ? [
                         const SizedBox(height: 20),
-                        Image.asset('assets/images/picture.png', width: 200),
+                        widget.videoFormMode == VideoFormMode.update ? Image.network(widget.videoData!['videoMeta']['thumbnailUrl']) : Image.asset('assets/images/picture.png', width: 200),
                         const SizedBox(height: 30),
                         const Text('Klik disini untuk menambah thumbnail')
                       ] : [
@@ -123,27 +128,66 @@ class _VideoFormState extends State<VideoForm> {
                 ),
                 const SizedBox(height: 10),
                 if (widget.videoFormMode == VideoFormMode.update)
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
-                        youtubeVideoId: widget.videoData!['videoMeta']['youtubeId'],
-                        subject: widget.videoData!['videoMeta']['subject'],
-                        title: widget.videoData!['videoMeta']['title'],
-                      ))).then((_) {
-                        SystemChrome.setPreferredOrientations(
-                            [DeviceOrientation.portraitUp]);
-                        SystemChrome.setEnabledSystemUIMode(
-                          SystemUiMode.edgeToEdge,
-                        );
-                      });
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 18),
-                      child: Text('Preview Video'),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 5),
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
+                              youtubeVideoId: widget.videoData!['videoMeta']['youtubeId'],
+                              subject: widget.videoData!['videoMeta']['subject'],
+                              title: widget.videoData!['videoMeta']['title'],
+                            ))).then((_) {
+                              SystemChrome.setPreferredOrientations(
+                                  [DeviceOrientation.portraitUp]);
+                              SystemChrome.setEnabledSystemUIMode(
+                                SystemUiMode.edgeToEdge,
+                              );
+                            });
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 18),
+                            child: Text('Preview Video'),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 5),
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            showDialog(context: context, builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Hapus Video ?'),
+                                content: SingleChildScrollView(
+                                  child: ListBody(
+                                    children: const <Widget> [
+                                      Text('Video ini akan dihapus secara permanent! Pastikan anda juga menghapus file video dari dashbord YouTube'),
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget> [
+                                  TextButton(onPressed: () {
+                                    Navigator.pop(context);
+                                  }, child: Text('Batal')),
+                                  TextButton(onPressed: () {}, child: Text('Hapus')),
+                                ],
+                              );
+                            });
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 18),
+                            child: Text('Hapus Video'),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 )
               ],
             ),

@@ -13,7 +13,7 @@ class EmptyContent extends StatelessWidget {
     return Center(
       child: Column(
         children: <Widget> [
-          SvgPicture.asset('assets/images/empty.svg', width: 300),
+          SvgPicture.asset('assets/images/empty.svg', width: 150),
           const SizedBox(height: 20),
           Text(title, style: const TextStyle(
             fontWeight: FontWeight.bold,
