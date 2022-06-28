@@ -18,6 +18,10 @@ class ECourseApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(const <DeviceOrientation> [
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.white, // status bar color
     ));

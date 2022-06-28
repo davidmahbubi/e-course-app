@@ -32,4 +32,12 @@ class DatabaseService {
       print('Error when creating user data : $e');
     }
   }
+
+  static Future<void> deleteVideo(String videoId) async {
+    try {
+      await videoCollection().doc(videoId).delete();
+    } catch (e) {
+      print('Error when deleting video : $e');
+    }
+  }
 }

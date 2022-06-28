@@ -44,7 +44,10 @@ class WatchVideo extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(subject),
-                    FullScreenButton(controller: ytController)
+                    const SizedBox(height: 200),
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ],
                 ),
               )

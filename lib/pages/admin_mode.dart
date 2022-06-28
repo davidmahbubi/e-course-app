@@ -27,9 +27,11 @@ class _AdminModeState extends State<AdminMode> {
   void registerVideoDatabaseEvent() {
     DatabaseService.videoCollection().snapshots().listen(
       (event) {
-        setState(() {
-          videosList = event.docs.toList();
-        });
+        if (mounted) {
+          setState(() {
+            videosList = event.docs.toList();
+          });
+        }
       },
       onError: (error) {
         print('An error occured when fetching data');
