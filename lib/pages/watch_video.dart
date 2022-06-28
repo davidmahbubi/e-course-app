@@ -29,7 +29,7 @@ class WatchVideo extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              YoutubePlayer(controller: ytController, onReady: toggleLandscapeFullscreen),
+              YoutubePlayer(controller: ytController, onReady: toggleLandscapeFullscreen, aspectRatio: 16 / 9,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(

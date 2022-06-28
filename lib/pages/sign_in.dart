@@ -1,6 +1,7 @@
 import 'package:e_course_app/components/auth_top_content.dart';
 import 'package:e_course_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -86,6 +87,23 @@ class _SignInState extends State<SignIn> {
                           )
                         )
                       ),
+                      const SizedBox(height: 17),
+                      RichText(text: TextSpan(
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan> [
+                          const TextSpan(text: 'Belum punya akun ? '),
+                          TextSpan(
+                            text: 'Login',
+                            style: const TextStyle(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()..onTap = () {
+                              print('Clicked');
+                            }
+                          )
+                        ]
+                      )),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),

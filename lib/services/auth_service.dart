@@ -1,7 +1,6 @@
 import 'package:e_course_app/services/database_service.dart';
 import 'package:e_course_app/services/local_storage_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -11,7 +10,7 @@ class AuthService {
     try {
       Map<String, dynamic>? userData = await DatabaseService.getUserByEmail(email);
       if (userData != null) {
-          LocalStorageService.localStorage.setStringList('user', <String> [userData['name'], userData['role'], email ?? '']);
+          LocalStorageService.localStorage.setStringList('user', <String> [userData['name'], userData['role'], email]);
           UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
           User? firebaseUser = result.user;
           if (firebaseUser != null && firebaseUser.email != null) {
