@@ -4,18 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_course_app/enums/video_form_mode.dart';
 import 'package:e_course_app/components/empty_content.dart';
-import 'package:e_course_app/components/video_card.dart';
 import 'package:e_course_app/pages/video_form.dart';
 import 'package:e_course_app/services/database_service.dart';
 
-class VideoList extends StatefulWidget {
-  const VideoList({Key? key}) : super(key: key);
+class AdminMode extends StatefulWidget {
+  const AdminMode({Key? key}) : super(key: key);
 
   @override
-  State<VideoList> createState() => _VideoListState();
+  State<AdminMode> createState() => _AdminModeState();
 }
 
-class _VideoListState extends State<VideoList> {
+class _AdminModeState extends State<AdminMode> {
 
   List<QueryDocumentSnapshot<Object?>> videosList = [];
 
@@ -41,7 +40,7 @@ class _VideoListState extends State<VideoList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.white,

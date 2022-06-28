@@ -1,3 +1,6 @@
+import 'package:e_course_app/components/image_carousel.dart';
+import 'package:e_course_app/components/video_grid.dart';
+import 'package:e_course_app/services/local_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:e_course_app/components/image_carousel.dart';
@@ -16,6 +19,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<QueryDocumentSnapshot<Object?>> videosList = [];
+  bool? _isAdmin; 
 
   @override
   void initState() {
@@ -32,6 +36,11 @@ class _HomeState extends State<Home> {
         print('An error occured when fetching data');
       },
     );
+  }
+
+  Future<void> retrieveUserInfo() async {
+    List<String>? userData = LocalStorageService.localStorage.getStringList('user');
+    if (userData != null) _isAdmin = userData[1] == 'admin';
   }
 
   @override
@@ -69,14 +78,18 @@ class _HomeState extends State<Home> {
               ]): 
               VideoGrid(videosList: videosList,
                 onTap: (String videoId, Map<String, dynamic> videoData) { 
-                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
-                    youtubeVideoId: videoData['youtubeId'],
-                    title: videoData['title'],
-                    subject: videoData['subject'],
-                  ))).then((_) {
-                    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-                  });
+                  try {
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
+                      youtubeVideoId: videoData['youtubeId'],
+                      title: videoData['title'],
+                      subject: videoData['subject'],
+                    ))).then((_) {
+                      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+                    });
+                  } catch(e) {
+                    print('Navigator error $e');
+                  }
                 }
               ),
             )
