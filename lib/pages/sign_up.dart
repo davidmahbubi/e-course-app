@@ -115,7 +115,7 @@ class _SignUpState extends State<SignUp> {
                               text: 'Masuk',
                               style: const TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()..onTap = () {
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const MainPage()));
+                                Navigator.pop(context);
                               }
                             )
                           ]

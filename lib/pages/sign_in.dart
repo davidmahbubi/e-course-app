@@ -102,9 +102,7 @@ class _SignInState extends State<SignIn> {
                               text: 'Daftar',
                               style: const TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()..onTap = () {
-                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SignUp())).then((_) {
-                                  setState(() {});
-                                });
+                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SignUp()));
                               }
                             )
                           ]
