@@ -1,12 +1,12 @@
 import 'package:e_course_app/components/image_carousel.dart';
 import 'package:e_course_app/components/video_grid.dart';
+import 'package:e_course_app/services/local_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_course_app/pages/watch_video.dart';
 import 'package:e_course_app/services/database_service.dart';
 import 'package:e_course_app/components/empty_content.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -39,8 +39,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> retrieveUserInfo() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? userData = prefs.getStringList('user');
+    List<String>? userData = LocalStorageService.localStorage.getStringList('user');
     if (userData != null) _isAdmin = userData[1] == 'admin';
   }
 

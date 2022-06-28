@@ -1,7 +1,7 @@
 import 'package:e_course_app/services/auth_service.dart';
+import 'package:e_course_app/services/local_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
 
@@ -22,9 +22,8 @@ class _ProfileState extends State<Profile> {
     fetchProfileData();
   }
 
-  Future<void> fetchProfileData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? userData = prefs.getStringList('user');
+  void fetchProfileData() {
+    List<String>? userData = LocalStorageService.localStorage.getStringList('user');
     setState(() {
       _displayName = userData![0];
       _email = userData[2];
@@ -50,9 +49,8 @@ class _ProfileState extends State<Profile> {
               Text(_email),
               const SizedBox(height: 40),
               ElevatedButton(
-                onPressed: () async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  prefs.remove('user');
+                onPressed: () async {;
+                  LocalStorageService.localStorage.remove('user');
                   await AuthService.signOut();
                   
                 },

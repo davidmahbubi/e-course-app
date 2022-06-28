@@ -1,8 +1,9 @@
+import 'dart:async';
 import 'package:e_course_app/pages/home.dart';
 import 'package:e_course_app/pages/profile.dart';
-import 'package:e_course_app/pages/video_list.dart';
+import 'package:e_course_app/pages/admin_mode.dart';
+import 'package:e_course_app/services/local_storage_service.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
 
@@ -25,17 +26,17 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> fetchAdminPrevilege() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _isAdmin = prefs.getStringList('user')![1] == 'admin';
+      final userData = LocalStorageService.localStorage.getStringList('user');
+      print(userData);
+      _isAdmin = userData != null ? userData[1] == 'admin' : false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    List<Widget> pagesList = <Widget> [Home(), Profile()];
-    if (_isAdmin) pagesList.add(const VideoList());
+    List<Widget> pagesList = <Widget> [const Home(), const Profile()];
+    if (_isAdmin) pagesList.add(const AdminMode());
 
     return Scaffold(
       body: pagesList[_index],
@@ -47,9 +48,9 @@ class _MainPageState extends State<MainPage> {
           });
         },
         items: <BottomNavigationBarItem> [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          if (_isAdmin) BottomNavigationBarItem(icon: Icon(Icons.admin_panel_settings), label: 'Admin Mode'),
+          const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          const BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          if (_isAdmin) const BottomNavigationBarItem(icon: Icon(Icons.admin_panel_settings), label: 'Admin Mode'),
         ],
       ),
     );

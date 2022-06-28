@@ -1,5 +1,6 @@
 import 'package:e_course_app/components/auth_top_content.dart';
 import 'package:e_course_app/services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,16 +18,17 @@ class _SignInState extends State<SignIn> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  Future<void> _login() async {
+  Future<bool?> _login() async {
     setState(() {
       _isLoading = true;
     });
-    await AuthService.signinWithEmailPassword(_emailController.text, _passwordController.text);
+    User? userData = await AuthService.signinWithEmailPassword(_emailController.text, _passwordController.text);
     if (mounted) {
       setState(() {
         _isLoading = false;
       });
     }
+    return userData != null;
   }
 
   @override
@@ -70,7 +72,14 @@ class _SignInState extends State<SignIn> {
                       _isLoading ? CircularProgressIndicator() : SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: _login,
+                          onPressed: () async {
+                            bool? isLoginSuccess = await _login();
+                            if (isLoginSuccess == null || !isLoginSuccess) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Username / Password anda salah ! silahkan cek kembali !'))
+                              );
+                            }
+                          },
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 17),
                             child: Text('Masuk'),
