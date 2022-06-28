@@ -22,12 +22,16 @@ class _ProfileState extends State<Profile> {
     fetchProfileData();
   }
 
-  void fetchProfileData() {
+  void fetchProfileData() async {
     List<String>? userData = LocalStorageService.localStorage.getStringList('user');
-    setState(() {
-      _displayName = userData![0];
-      _email = userData[2];
-    });
+    if (userData == null) {
+        AuthService.signOut();
+    } else {
+      setState(() {
+        _displayName = userData![0];
+        _email = userData[2];
+      });
+    }
   }
 
   @override
@@ -41,18 +45,20 @@ class _ProfileState extends State<Profile> {
               const SizedBox(height: 80), 
               SvgPicture.asset('assets/images/student.svg', width: 180),
               const SizedBox(height: 20),
-              Text(_displayName, style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              )),
+              Text(
+                _displayName,
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                )
+              ),
               const SizedBox(height: 10),
               Text(_email),
               const SizedBox(height: 40),
               ElevatedButton(
-                onPressed: () async {;
+                onPressed: () async {
                   LocalStorageService.localStorage.remove('user');
                   await AuthService.signOut();
-                  
                 },
                 child: const Text('Sign Out'),
               )

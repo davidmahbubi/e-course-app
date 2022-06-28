@@ -20,4 +20,16 @@ class DatabaseService {
       return null;
     }
   }
+
+  static Future<void> createUser(String name, String email, String role) async {
+    try {
+      Map<String, String> userData = {
+        'name': name,
+        'role': role
+      };
+      await userCollection().doc(email).set(userData);
+    } catch(e) {
+      print('Error when creating user data : $e');
+    }
+  }
 }

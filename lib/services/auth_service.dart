@@ -27,6 +27,18 @@ class AuthService {
     }
   }
 
+  static Future<void> signUpWithEmailPassword(String name, String email, String password) async {
+    try {
+      await DatabaseService.createUser(name, email, 'student');
+      LocalStorageService.localStorage.setStringList('user', <String> [name, 'student', email]);
+      UserCredential? userCred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+    } catch(e) {
+      LocalStorageService.localStorage.remove('user');
+      signOut();
+      print('Error in signUpWithEmailPassword method $e');
+    }
+  }
+
   static Future<void> signOut() async {
     await _auth.signOut();
   }

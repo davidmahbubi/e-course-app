@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AuthTopContent extends StatelessWidget {
-  const AuthTopContent({Key? key}) : super(key: key);
+
+  final String title;
+  final String? description;
+
+  const AuthTopContent({Key? key, this.title = 'E-Course App', this.description}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,7 @@ class AuthTopContent extends StatelessWidget {
           )
         ),
         const SizedBox(height: 5),
-        const Text('Silahkan masuk untuk melanjutkan'),
+        if (description != null) Text(description!),
         const SizedBox(height: 40)
       ],
     );

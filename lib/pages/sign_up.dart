@@ -1,5 +1,6 @@
 import 'package:e_course_app/components/auth_top_content.dart';
-import 'package:e_course_app/pages/sign_up.dart';
+import 'package:e_course_app/pages/main_page.dart';
+import 'package:e_course_app/pages/sign_in.dart';
 import 'package:e_course_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -7,33 +8,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_validator/form_validator.dart';
 
-class SignIn extends StatefulWidget {
+class SignUp extends StatefulWidget {
 
-  const SignIn({Key? key}) : super(key: key);
+  const SignUp({Key? key}) : super(key: key);
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _SignInState extends State<SignIn> {
+class _SignUpState extends State<SignUp> {
 
   bool _isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmationController = TextEditingController();
 
-  Future<bool?> _login() async {
+  Future<void> _register() async {
     setState(() {
       _isLoading = true;
     });
-    User? userData = await AuthService.signinWithEmailPassword(_emailController.text, _passwordController.text);
+    await AuthService.signUpWithEmailPassword(_nameController.text, _emailController.text, _passwordController.text);
     if (mounted) {
       setState(() {
         _isLoading = false;
       });
+      Navigator.pop(context);
     }
-    return userData != null;
   }
 
   @override
@@ -51,7 +54,7 @@ class _SignInState extends State<SignIn> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget> [
-                const AuthTopContent(description: 'Masuk untuk melanjutkan'),
+                const AuthTopContent(description: 'Registrasi akun pelajar'),
                 Form(
                   key: _formKey,
                   child: Padding(
@@ -59,7 +62,14 @@ class _SignInState extends State<SignIn> {
                     child: Column(
                       children: <Widget> [
                         TextFormField(
+                          controller: _nameController,
+                          validator: ValidationBuilder(localeName: 'id').required().build(),
+                          decoration: const InputDecoration(border: OutlineInputBorder(), label: Text('Nama')),
+                        ),
+                        const SizedBox(height: 14),
+                        TextFormField(
                           controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
                           validator: ValidationBuilder(localeName: 'id').required().email().build(),
                           decoration: const InputDecoration(border: OutlineInputBorder(), label: Text('E-Mail')),
                         ),
@@ -67,8 +77,15 @@ class _SignInState extends State<SignIn> {
                         TextFormField(
                           obscureText: true,
                           controller: _passwordController,
-                          validator: ValidationBuilder(localeName: 'id').required().build(),
+                          validator: ValidationBuilder(localeName: 'id').required().minLength(8).build(),
                           decoration: const InputDecoration(border: OutlineInputBorder(), label: Text('Password')),
+                        ),
+                        const SizedBox(height: 14),
+                        TextFormField(
+                          obscureText: true,
+                          controller: _passwordConfirmationController,
+                          validator: (value) => value != _passwordController.text ? 'Konfirmasi password harus sama dengan password' : null,
+                          decoration: const InputDecoration(border: OutlineInputBorder(), label: Text('Konfirmasi Password')),
                         ),
                         const SizedBox(height: 17),
                         _isLoading ? const CircularProgressIndicator() : SizedBox(
@@ -76,18 +93,14 @@ class _SignInState extends State<SignIn> {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                bool? isLoginSuccess = await _login();
-                                if (isLoginSuccess == null || !isLoginSuccess) {
-                                  // ignore: use_build_context_synchronously
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Username / Password anda salah ! silahkan cek kembali !'))
-                                  );
-                                }
+                                await _register();
+                                // ignore: use_build_context_synchronously
+                                // Navigator.pop(context);
                               }
                             },
                             child: const Padding(
                               padding: EdgeInsets.symmetric(vertical: 17),
-                              child: Text('Masuk'),
+                              child: Text('Daftar'),
                             )
                           )
                         ),
@@ -97,14 +110,12 @@ class _SignInState extends State<SignIn> {
                             color: Colors.black,
                           ),
                           children: <TextSpan> [
-                            const TextSpan(text: 'Belum punya akun ? '),
+                            const TextSpan(text: 'Sudah punya akun ? '),
                             TextSpan(
-                              text: 'Daftar',
+                              text: 'Masuk',
                               style: const TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()..onTap = () {
-                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SignUp())).then((_) {
-                                  setState(() {});
-                                });
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => const MainPage()));
                               }
                             )
                           ]
