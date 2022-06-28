@@ -1,7 +1,7 @@
-import 'package:e_course_app/components/image_carousel.dart';
-import 'package:e_course_app/components/video_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:e_course_app/components/image_carousel.dart';
+import 'package:e_course_app/components/video_grid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_course_app/pages/watch_video.dart';
 import 'package:e_course_app/services/database_service.dart';
@@ -24,13 +24,11 @@ class _HomeState extends State<Home> {
   }
 
   void registerVideoDatabaseEvent() {
-    DatabaseService.videoCollection().snapshots().listen(
-      (event) {
-        setState(() {
-          videosList = event.docs.toList();
-        });
-      },
-      onError: (error) {
+    DatabaseService.videoCollection().snapshots().listen((event) {
+      setState(() {
+        videosList = event.docs.toList();
+      });
+    }, onError: (error) {
         print('An error occured when fetching data');
       },
     );
@@ -76,10 +74,8 @@ class _HomeState extends State<Home> {
                     title: videoData['title'],
                     subject: videoData['subject'],
                   ))).then((_) {
-                    SystemChrome.setPreferredOrientations(
-                        [DeviceOrientation.portraitUp]);
-                    SystemChrome.setEnabledSystemUIMode(
-                        SystemUiMode.edgeToEdge);
+                    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
                   });
                 }
               ),

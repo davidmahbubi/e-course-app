@@ -132,11 +132,8 @@ class _VideoFormState extends State<VideoForm> {
                         subject: widget.videoData!['videoMeta']['subject'],
                         title: widget.videoData!['videoMeta']['title'],
                       ))).then((_) {
-                        SystemChrome.setPreferredOrientations(
-                            [DeviceOrientation.portraitUp]);
-                        SystemChrome.setEnabledSystemUIMode(
-                          SystemUiMode.edgeToEdge,
-                        );
+                        SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+                        SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
                       });
                     },
                     child: const Padding(
