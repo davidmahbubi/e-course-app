@@ -1,16 +1,33 @@
-# e_course_app
 
-A new Flutter project.
+# 📚 E-Course App
 
-## Getting Started
+E-Course app is a simple course app which showing a YouTube video as a course uploaded by Admin roles.
 
-This project is a starting point for a Flutter application.
+## 🛠️ Tech Stacks
+- Flutter
+- Firebase Auth (Authenticator for authenticating user)
+- Firestore Database (Database for storing Video Meta Data)
+- Firebase Storage (Storage Server for storing thumbnails)
+## 🚀 Installation
 
-A few resources to get you started if this is your first Flutter project:
+Make sure that [Flutter SDK](https://docs.flutter.dev/get-started/install) is already installed to your machine.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+  flutter pub get
+  flutter run
+```
+## ⚙️ Build to Production
+```bash
+  flutter build apk
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## 🧑‍🦰 Authors
+
+- [@davidmahbubi](https://www.github.com/davidmahbubi)
+
+
+## ⚖️ License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
