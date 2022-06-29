@@ -26,6 +26,7 @@ class _HomeState extends State<Home> {
   }
 
   void registerVideoDatabaseEvent() {
+    print('Re-registering event');
     DatabaseService.videoCollection().snapshots().listen((event) {
       setState(() {
         videosList = event.docs.toList();
@@ -74,22 +75,22 @@ class _HomeState extends State<Home> {
                 SizedBox(height: 10),
                 EmptyContent(description: 'Stay tuned untuk video course nya, ya !')
               ]): 
-              VideoGrid(videosList: videosList,
-                onTap: (String videoId, Map<String, dynamic> videoData) { 
-                  try {
-                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
-                      youtubeVideoId: videoData['youtubeId'],
-                      title: videoData['title'],
-                      subject: videoData['subject'],
-                    ))).then((_) {
-                      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-                      super.dispose();
-                    });
-                  } catch(e) {
-                    print('Navigator error $e');
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: VideoGrid(videosList: videosList,
+                  onTap: (String videoId, Map<String, dynamic> videoData) { 
+                    try {
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
+                        youtubeVideoId: videoData['youtubeId'],
+                        title: videoData['title'],
+                        subject: videoData['subject'],
+                      )));
+                    } catch(e) {
+                      print('Navigator error $e');
+                    }
                   }
-                }
+                ),
               ),
             )
           ],

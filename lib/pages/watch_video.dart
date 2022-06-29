@@ -18,40 +18,47 @@ class WatchVideo extends StatelessWidget {
 
   void toggleLandscapeFullscreen() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-    ytController.toggleFullScreenMode();
+    ytController.toggleFullScreenMode();  
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              YoutubePlayer(controller: ytController, onReady: toggleLandscapeFullscreen, aspectRatio: 16 / 9,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const SizedBox(height: 10),
-                    Text(
-                      title, style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+    return WillPopScope(
+      onWillPop: () async {
+        SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        return true;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                YoutubePlayer(controller: ytController, onReady: toggleLandscapeFullscreen, aspectRatio: 16 / 9),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const SizedBox(height: 10),
+                      Text(
+                        title, style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(subject),
-                    const SizedBox(height: 200),
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ],
-                ),
-              )
-            ],
+                      const SizedBox(height: 3),
+                      Text(subject),
+                      const SizedBox(height: 200),
+                      const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

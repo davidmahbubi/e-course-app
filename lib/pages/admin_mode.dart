@@ -67,15 +67,19 @@ class _AdminModeState extends State<AdminMode> {
                     SizedBox(height: 10),
                     EmptyContent(description: 'Klik tombol + untuk menambahkan video baru')
                   ],
-                ) : VideoGrid(videosList: videosList, onTap: (String videoId, Map<String, dynamic> videoData) {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context) => VideoForm(pageTitle: 'Update Video', videoFormMode: VideoFormMode.update, videoData: {
-                          'id': videoId,
-                          'videoMeta': videoData,
-                        })),
-                      );
-                    },
-                  ),
+                ) : SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: VideoGrid(videosList: videosList, onTap: (String videoId, Map<String, dynamic> videoData) {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (BuildContext context) => VideoForm(pageTitle: 'Update Video', videoFormMode: VideoFormMode.update, videoData: {
+                            'id': videoId,
+                            'videoMeta': videoData,
+                          })),
+                        );
+                      },
+                    ),
+                ),
               )
             ],
           ),
