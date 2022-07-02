@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
                   onTap: (String videoId, Map<String, dynamic> videoData) { 
                     try {
                       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
-                        youtubeVideoId: videoData['youtubeId'],
+                        youtubeVideoUrl: videoData['youtubeUrl'],
                         title: videoData['title'],
                         subject: videoData['subject'],
                       )));

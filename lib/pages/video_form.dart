@@ -24,7 +24,7 @@ class VideoForm extends StatefulWidget {
 
 class _VideoFormState extends State<VideoForm> {
 
-  TextEditingController youtubeIdController = TextEditingController();
+  TextEditingController youtubeUrlController = TextEditingController();
   TextEditingController videoTitleController = TextEditingController();
   TextEditingController subjectTitleController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -38,7 +38,7 @@ class _VideoFormState extends State<VideoForm> {
 
     if (widget.videoFormMode == VideoFormMode.update) {
       
-      youtubeIdController.text = widget.videoData!['videoMeta']['youtubeId'];
+      youtubeUrlController.text = widget.videoData!['videoMeta']['youtubeUrl'];
       videoTitleController.text = widget.videoData!['videoMeta']['title'];
       subjectTitleController.text = widget.videoData!['videoMeta']['subject'];
 
@@ -90,10 +90,10 @@ class _VideoFormState extends State<VideoForm> {
                   ),
                   const SizedBox(height: 30),
                   TextFormField(
-                    controller: youtubeIdController,
+                    controller: youtubeUrlController,
                     validator: ValidationBuilder(localeName: 'id').required().build(),
                     decoration: const InputDecoration(
-                      label: Text('ID YouTube Video'),
+                      label: Text('URL Video'),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -165,7 +165,7 @@ class _VideoFormState extends State<VideoForm> {
                           child: OutlinedButton(
                             onPressed: () {
                               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
-                                youtubeVideoId: widget.videoData!['videoMeta']['youtubeId'],
+                                youtubeVideoUrl: widget.videoData!['videoMeta']['youtubeUrl'],
                                 subject: widget.videoData!['videoMeta']['subject'],
                                 title: widget.videoData!['videoMeta']['title'],
                               )));
@@ -255,7 +255,7 @@ class _VideoFormState extends State<VideoForm> {
   Future<bool> storeVideo() async {
     try {
       return DatabaseService.videoCollection().add({
-        'youtubeId': youtubeIdController.text,
+        'youtubeUrl': youtubeUrlController.text,
         'title': videoTitleController.text,
         'subject': subjectTitleController.text,
         'tumbnailName': thumbName,
@@ -272,7 +272,7 @@ class _VideoFormState extends State<VideoForm> {
   Future<void> updateVideo(String dataId) async {
     try {
       await DatabaseService.videoCollection().doc(dataId).update({
-        'youtubeId': youtubeIdController.text,
+        'youtubeUrl': youtubeUrlController.text,
         'title': videoTitleController.text,
         'subject': subjectTitleController.text,
         'tumbnailName': thumbName,

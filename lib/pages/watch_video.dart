@@ -1,18 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_course_app/components/video_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+// import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
+import 'package:e_course_app/services/database_service.dart';
 
 class WatchVideo extends StatefulWidget {
 
   final String title;
   final String subject;
-  final String youtubeVideoId;
+  final String youtubeVideoUrl;
   late final YoutubePlayerController ytController;
 
-  WatchVideo({Key? key, required this.title, required this.subject, this.youtubeVideoId = 'azjRAEB1zXY'}) : super(key: key) {
+  WatchVideo({Key? key, required this.title, required this.subject, required this.youtubeVideoUrl}) : super(key: key) {
     ytController = YoutubePlayerController(
-      initialVideoId: youtubeVideoId,
-      flags: const YoutubePlayerFlags(mute: false, loop: true),
+      initialVideoId: YoutubePlayerController.convertUrlToId(youtubeVideoUrl)!,
+      params: YoutubePlayerParams(
+        showFullscreenButton: true,
+        showControls: true,
+      )
+      // flags: const YoutubePlayerFlags(mute: false, loop: true, forceHD: true),
     );
   }
 
@@ -22,19 +31,44 @@ class WatchVideo extends StatefulWidget {
 
 class _WatchVideoState extends State<WatchVideo> {
 
-  bool _isPlaying = false;
+  List<QueryDocumentSnapshot<Object?>> videosList = [];
 
   void toggleLandscapeFullscreen() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-    widget.ytController.toggleFullScreenMode();  
-    setState(() {
-      _isPlaying = true;
-    });
+    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
+  }
+
+  void toggleLandscapeOutFullscreen() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    registerVideoDatabaseEvent();
+    widget.ytController.onEnterFullscreen = () {
+      toggleLandscapeFullscreen();
+    };
+    widget.ytController.onExitFullscreen = () {
+      toggleLandscapeOutFullscreen();
+    };
+  }
+
+  void registerVideoDatabaseEvent() {
+    print('Re-registering event');
+    DatabaseService.videoCollection().snapshots().listen((event) {
+      setState(() {
+        videosList = event.docs.toList();
+      });
+    }, onError: (error) {
+        print('An error occured when fetching data');
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
       onWillPop: () async {
         SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -48,11 +82,10 @@ class _WatchVideoState extends State<WatchVideo> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                YoutubePlayer(
+                YoutubePlayerIFrame(
                   controller: widget.ytController,
-                  onReady: toggleLandscapeFullscreen,
+                  aspectRatio: 16/9,
                 ),
-                if (!_isPlaying)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
@@ -67,10 +100,22 @@ class _WatchVideoState extends State<WatchVideo> {
                       ),
                       const SizedBox(height: 3),
                       Text(widget.subject),
-                      const SizedBox(height: 200),
-                      const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                      const SizedBox(height: 5),
+                      Divider(),
+                      const SizedBox(height: 20),
+                      Text('Video Lainnya'),
+                      VideoGrid(videosList: videosList, onTap: (String videoId, Map<String, dynamic> videoData) { 
+                        try {
+                          widget.ytController.pause();
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
+                            youtubeVideoUrl: videoData['youtubeUrl'],
+                            title: videoData['title'],
+                            subject: videoData['subject'],
+                          )));
+                        } catch(e) {
+                          print('Navigator error $e');
+                        }
+                      })
                     ],
                   ),
                 )
