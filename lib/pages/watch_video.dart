@@ -60,6 +60,7 @@ class _WatchVideoState extends State<WatchVideo> {
     DatabaseService.videoCollection().snapshots().listen((event) {
       setState(() {
         videosList = event.docs.toList();
+        videosList.shuffle();
       });
     }, onError: (error) {
         print('An error occured when fetching data');
