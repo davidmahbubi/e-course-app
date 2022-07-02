@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:e_course_app/enums/video_form_mode.dart';
-import 'package:e_course_app/pages/admin_mode.dart';
 import 'package:e_course_app/pages/watch_video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -122,22 +121,30 @@ class _VideoFormState extends State<VideoForm> {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          if (localFile != null) {
-                            setState(() {
-                              _isLoading = true;
-                            });
-                            bool storeStatus = await storeVideo();
-                            setState(() {
-                              _isLoading = false;
-                            });
-                            if (storeStatus) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Berhasil menambahkan data video baru')),
-                              );
-                              Navigator.pop(context);
-                            }
-                          } else {
+                          if (localFile == null && widget.videoFormMode == VideoFormMode.create) {
                             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Gambar thumbnail belum diisi !') ));
+                          } else {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              if (widget.videoFormMode == VideoFormMode.create) {
+                                bool storeStatus = await storeVideo();
+                                if (storeStatus) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Berhasil menambahkan data video baru')),
+                                  );
+                                  Navigator.pop(context);
+                                }
+                              } else {
+                                await updateVideo(widget.videoData!['id']);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Berhasil mengupdate data video')),
+                                  );
+                                Navigator.pop(context);
+                              }
+                              setState(() {
+                                _isLoading = false;
+                              });
                           }
                         }
                       },
@@ -257,8 +264,22 @@ class _VideoFormState extends State<VideoForm> {
         print('Suksesss');
         return true;
       });
-    } on Exception catch(e) {
+    } catch(e) {
       return false;
+    }
+  }
+
+  Future<void> updateVideo(String dataId) async {
+    try {
+      await DatabaseService.videoCollection().doc(dataId).update({
+        'youtubeId': youtubeIdController.text,
+        'title': videoTitleController.text,
+        'subject': subjectTitleController.text,
+        'tumbnailName': thumbName,
+        'thumbnailUrl': localFile == null ? widget.videoData!['videoMeta']['thumbnailUrl'] : await fetchFirebaseImage(thumbName),
+      });
+    } catch (e) {
+      print('Error happened when trying to update video data : $e');
     }
   }
 

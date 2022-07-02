@@ -33,7 +33,8 @@ class DatabaseService {
     }
   }
 
-  static Future<void> deleteVideo(String videoId) async {
+  static Future<void> 
+  deleteVideo(String videoId) async {
     try {
       await videoCollection().doc(videoId).delete();
     } catch (e) {

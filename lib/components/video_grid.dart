@@ -15,7 +15,6 @@ class VideoGrid extends StatelessWidget {
       childAspectRatio: 0.58,
       crossAxisCount: 2,
       shrinkWrap: true,
-      cacheExtent: 9999,
       physics: const BouncingScrollPhysics(),
       children: videosList.map((QueryDocumentSnapshot<Object?> data) {
         Map<String, dynamic> videoData = data.data() as Map<String, dynamic>;

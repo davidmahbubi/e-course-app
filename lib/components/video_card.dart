@@ -21,29 +21,25 @@ class VideoCard extends StatelessWidget {
         const SizedBox(height: 13),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Flexible(
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              style: const TextStyle(
-                overflow: TextOverflow.ellipsis,
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
-              ),
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            style: const TextStyle(
+              overflow: TextOverflow.ellipsis,
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
             ),
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Flexible(
-            child: Text(
-              subject,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              style: const TextStyle(
-                overflow: TextOverflow.ellipsis,
-              ),
+          child: Text(
+            subject,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            style: const TextStyle(
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ),

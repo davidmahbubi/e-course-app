@@ -67,9 +67,8 @@ class _HomeState extends State<Home> {
             const SizedBox(height: 20),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Text('Course Videos', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              child: Text('📽️   Course Videos', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             ),
-            const SizedBox(height: 30),
             Expanded(
               child: videosList.isEmpty ? Column(children: const <Widget>[
                 SizedBox(height: 10),
