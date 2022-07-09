@@ -6,6 +6,7 @@ import 'package:e_course_app/enums/video_form_mode.dart';
 import 'package:e_course_app/components/empty_content.dart';
 import 'package:e_course_app/pages/video_form.dart';
 import 'package:e_course_app/services/database_service.dart';
+import 'package:e_course_app/components/search_action.dart';
 
 class AdminMode extends StatefulWidget {
   const AdminMode({Key? key}) : super(key: key);
@@ -51,6 +52,22 @@ class _AdminModeState extends State<AdminMode> {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         elevation: 0,
+        actions: [
+          SearchAction(
+            videosList: videosList,
+            onTap: (Map<String, dynamic> selectedVideo) {
+              try {
+                Navigator.pushReplacement(context, MaterialPageRoute(
+                builder: (BuildContext context) => VideoForm(pageTitle: 'Update Video', videoFormMode: VideoFormMode.update, videoData: {
+                  'id': selectedVideo['vidId'],
+                  'videoMeta': selectedVideo,
+                })));
+              } catch(e) {
+                print('Navigator error $e');
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, top: 20),

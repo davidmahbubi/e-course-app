@@ -1,4 +1,5 @@
 import 'package:e_course_app/components/image_carousel.dart';
+import 'package:e_course_app/components/search_action.dart';
 import 'package:e_course_app/components/video_grid.dart';
 import 'package:e_course_app/services/local_storage_service.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_course_app/pages/watch_video.dart';
 import 'package:e_course_app/services/database_service.dart';
 import 'package:e_course_app/components/empty_content.dart';
+import 'package:search_page/search_page.dart';
+
+import 'package:e_course_app/utils/helper.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -57,6 +61,22 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.white,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
+        actions: <Widget> [
+          SearchAction(
+            videosList: videosList,
+            onTap: (Map<String, dynamic> selectedVideo) {
+              try {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => WatchVideo(
+                  youtubeVideoUrl: selectedVideo['youtubeUrl'],
+                  title: selectedVideo['title'],
+                  subject: selectedVideo['subject'],
+                )));
+              } catch(e) {
+                print('Navigator error $e');
+              }
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
