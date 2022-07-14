@@ -1,8 +1,6 @@
 import 'package:e_course_app/components/auth_top_content.dart';
-import 'package:e_course_app/pages/sign_up.dart';
 import 'package:e_course_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_validator/form_validator.dart';
@@ -51,7 +49,7 @@ class _SignInState extends State<SignIn> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget> [
-                const AuthTopContent(description: 'Masuk untuk melanjutkan'),
+                const AuthTopContent(description: 'Masuk dengan akun admin untuk melanjutkan'),
                 Form(
                   key: _formKey,
                   child: Padding(
@@ -76,12 +74,16 @@ class _SignInState extends State<SignIn> {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
+                                FocusManager.instance.primaryFocus?.unfocus();
                                 bool? isLoginSuccess = await _login();
                                 if (isLoginSuccess == null || !isLoginSuccess) {
                                   // ignore: use_build_context_synchronously
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(content: Text('Username / Password anda salah ! silahkan cek kembali !'))
                                   );
+                                } else {
+                                  // hide keyboard
+                                  Navigator.pop(context);
                                 }
                               }
                             },
@@ -92,21 +94,21 @@ class _SignInState extends State<SignIn> {
                           )
                         ),
                         const SizedBox(height: 17),
-                        RichText(text: TextSpan(
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                          children: <TextSpan> [
-                            const TextSpan(text: 'Belum punya akun ? '),
-                            TextSpan(
-                              text: 'Daftar',
-                              style: const TextStyle(color: Colors.blue),
-                              recognizer: TapGestureRecognizer()..onTap = () {
-                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SignUp()));
-                              }
-                            )
-                          ]
-                        )),
+                        // RichText(text: TextSpan(
+                        //   style: const TextStyle(
+                        //     color: Colors.black,
+                        //   ),
+                        //   children: <TextSpan> [
+                        //     const TextSpan(text: 'Belum punya akun ? '),
+                        //     TextSpan(
+                        //       text: 'Daftar',
+                        //       style: const TextStyle(color: Colors.blue),
+                        //       recognizer: TapGestureRecognizer()..onTap = () {
+                        //         Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SignUp()));
+                        //       }
+                        //     )
+                        //   ]
+                        // )),
                         const SizedBox(height: 20),
                       ],
                     ),

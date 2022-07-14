@@ -1,3 +1,4 @@
+import 'package:e_course_app/pages/home.dart';
 import 'package:e_course_app/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +11,6 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? user = Provider.of<User?>(context);
-    return user == null ? const SignIn() : const MainPage();
+    return user == null ? const Home() : const MainPage();
   }
 }

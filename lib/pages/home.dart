@@ -1,6 +1,8 @@
 import 'package:e_course_app/components/image_carousel.dart';
 import 'package:e_course_app/components/search_action.dart';
 import 'package:e_course_app/components/video_grid.dart';
+import 'package:e_course_app/pages/sign_in.dart';
+import 'package:e_course_app/pages/wrapper.dart';
 import 'package:e_course_app/services/local_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -62,6 +64,17 @@ class _HomeState extends State<Home> {
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         actions: <Widget> [
+          IconButton(
+            onPressed: () {
+              List<String>? userData = LocalStorageService.localStorage.getStringList('user');
+              if (userData != null) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Anda sudah dalam mode admin ! klik menu "Profile" dan klik "Sign Out" untuk keluar mode admin')));
+              } else {
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SignIn()));
+              }
+            },
+            icon: const Icon(Icons.admin_panel_settings, color: Colors.black)
+          ),
           SearchAction(
             videosList: videosList,
             onTap: (Map<String, dynamic> selectedVideo) {

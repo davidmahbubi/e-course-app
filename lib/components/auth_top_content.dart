@@ -14,7 +14,7 @@ class AuthTopContent extends StatelessWidget {
         const SizedBox(height: 60),
         Image.asset('assets/images/book.png', width: 150),
         const SizedBox(height: 40),
-        const Text('E-Course App',
+        const Text('Admin Mode',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 25
