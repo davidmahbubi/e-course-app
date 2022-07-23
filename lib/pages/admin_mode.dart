@@ -48,7 +48,7 @@ class _AdminModeState extends State<AdminMode> {
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.white,
         title: const Text(
-          'E-Course App',
+          'SayuWiwit Edu',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         elevation: 0,

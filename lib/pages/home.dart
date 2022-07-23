@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         shape: null,
-        title: const Text('E-Course App',
+        title: const Text('SayuWiwit Edu',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,

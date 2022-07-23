@@ -48,8 +48,9 @@ class _SignInState extends State<SignIn> {
           width: double.infinity,
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget> [
-                const AuthTopContent(description: 'Masuk dengan akun admin untuk melanjutkan'),
+                const AuthTopContent(description: 'Admin Mode, Masuk dengan akun admin untuk melanjutkan'),
                 Form(
                   key: _formKey,
                   child: Padding(
