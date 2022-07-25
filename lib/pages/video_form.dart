@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:e_course_app/services/storage_service.dart';
 import 'package:e_course_app/utils/helper.dart';
 import 'package:e_course_app/services/database_service.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_validator/form_validator.dart';
 
 class VideoForm extends StatefulWidget {
@@ -79,7 +80,7 @@ class _VideoFormState extends State<VideoForm> {
                       child: Column(
                         children: localFile == null ? [
                           const SizedBox(height: 20),
-                          widget.videoFormMode == VideoFormMode.update ? Image.network(widget.videoData!['videoMeta']['thumbnailUrl'], width: 200) : Image.asset('assets/images/picture.png', width: 200),
+                          widget.videoFormMode == VideoFormMode.update ? Image.network(widget.videoData!['videoMeta']['thumbnailUrl'], width: 200) : SvgPicture.asset('assets/images/pick_an_image.svg', width: 150),
                           const SizedBox(height: 30),
                           const Text('Klik disini untuk menambah thumbnail')
                         ] : [

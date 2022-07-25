@@ -83,6 +83,7 @@ flutter:
     - assets/images/carousels/hak_kewajiban.jpg
     - assets/images/carousels/indahnya_saling_menghormati.jpg
     - assets/images/carousels/kerukunan_dalam_perbedaan.jpg
+    - assets/images/pick_an_image.svg
 
   fonts:
     - family: Poppins
