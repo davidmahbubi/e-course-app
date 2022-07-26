@@ -16,9 +16,8 @@ class VideoCard extends StatelessWidget {
       children: <Widget>[
         ClipRRect(
           // borderRadius: const BorderRadius.all(Radius.circular(15)),
-          child: Image.network(imagePath, height: 210, width: 160),
+          child: Image.network(imagePath, height: 200, width: 160),
         ),
-        const SizedBox(height: 13),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(

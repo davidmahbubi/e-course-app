@@ -17,12 +17,16 @@ class WatchVideo extends StatefulWidget {
   WatchVideo({Key? key, required this.title, required this.subject, required this.youtubeVideoUrl}) : super(key: key) {
     ytController = YoutubePlayerController(
       initialVideoId: YoutubePlayerController.convertUrlToId(youtubeVideoUrl)!,
-      params: YoutubePlayerParams(
+      params: const YoutubePlayerParams(
         showFullscreenButton: true,
         showControls: true,
       )
-      // flags: const YoutubePlayerFlags(mute: false, loop: true, forceHD: true),
     );
+    ytController.listen((event) {
+      ytController.setLoop(true);
+      ytController.hidePauseOverlay();
+      ytController.hideTopMenu();
+    });
   }
 
   @override

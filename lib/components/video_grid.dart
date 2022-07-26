@@ -12,7 +12,7 @@ class VideoGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      childAspectRatio: 0.58,
+      childAspectRatio: 0.65,
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
